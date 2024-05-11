@@ -9,9 +9,9 @@ import java.sql.SQLException;
 
 public class Program {
     public static void main(String[] args) throws SQLException {
-        ConnectionFactory.getConnection();
-        Client client1 = new Client(null,"Annelise","anninhadonetao@gmail.com");
         ClientDAO clientDAO = new ClientDAO();
+        Client client1 = new Client(null,"Annelise","anninhadonetao@gmail.com");
+
         try {
             clientDAO.save(client1);
         } catch (SQLException e) {

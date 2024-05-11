@@ -24,8 +24,10 @@ public class ClientDAO {
             throw new RuntimeException(e);
         } finally {
             try {
-                pst.close();
-                conn.close();
+                if (pst!=null){
+                pst.close();}
+                if (conn!=null){
+                conn.close();}
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
