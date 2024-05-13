@@ -1,18 +1,22 @@
 package application;
 
 import entities.Client;
-import entitiesDao.ClientDAO;
+import service.ClientService;
 
 import java.sql.SQLException;
 
 
 public class Program {
     public static void main(String[] args) throws SQLException {
-        ClientDAO clientDAO = new ClientDAO();
+        ClientService clientService = new ClientService();
         Client client1 = new Client(null,"Annelise","anninhadonetao@gmail.com");
-        clientDAO.update(client1);
+        //clientService.create(client1);
 
-        for (Client c : clientDAO.read()){
+        Client client2 = new Client(1,"Anne","anne22@gmail.com");
+        clientService.update(client2);
+
+
+        for (Client c : clientService.read()){
             System.out.println("Cliente: " + c.getName());
         }
 

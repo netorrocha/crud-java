@@ -1,4 +1,4 @@
-package entitiesDao;
+package service;
 
 import entities.Client;
 import factory.ConnectionFactory;
@@ -10,8 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientDAO {
-    public void update(Client client) throws SQLException {
+public class ClientService {
+    public void create(Client client) throws SQLException {
         String sql = "INSERT INTO `clients`" + "(`nome`," + "`email`) VALUES(?,?)";
         Connection conn = null;
         PreparedStatement pst = null;
@@ -32,7 +32,7 @@ public class ClientDAO {
                 if (conn!=null){
                 conn.close();}
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
 
         }
@@ -83,6 +83,37 @@ public class ClientDAO {
         }
 
         return clients;
+    }
+
+    public void update(Client client){
+        String sql = "UPDATE clients SET nome = ?, email = ?" + "WHERE id = ?";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = ConnectionFactory.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            ps.setString(1, client.getName());
+            ps.setString(2, client.getEmail());
+            ps.setInt(3, client.getId());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (ps != null){
+                    ps.close();
+                }
+                if (conn != null){
+                    conn.close();
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
 }
 
