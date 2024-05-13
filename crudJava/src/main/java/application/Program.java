@@ -13,8 +13,10 @@ public class Program {
         //clientService.create(client1);
 
         Client client2 = new Client(1,"Anne","anne22@gmail.com");
-        clientService.update(client2);
+        //clientService.update(client2);
 
+        Client client3 = new Client(4,"Annelise","anne22@gmail.com");
+        clientService.delete(client3);
 
         for (Client c : clientService.read()){
             System.out.println("Cliente: " + c.getName());

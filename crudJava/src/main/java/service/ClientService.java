@@ -115,6 +115,33 @@ public class ClientService {
             }
         }
     }
+
+    public void delete(Client client){
+        String sql = "DELETE FROM clients WHERE id = ?";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+        conn = ConnectionFactory.getConnection();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, client.getId());
+        ps.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            try {
+            if (ps != null){
+                ps.close();
+            }
+            if (conn != null){
+                conn.close();
+            }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+    }
 }
 
 
