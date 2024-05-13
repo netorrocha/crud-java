@@ -1,6 +1,7 @@
 package service;
 
 import entities.Client;
+import entitiesDao.ClientDao;
 import factory.ConnectionFactory;
 
 import java.sql.Connection;
@@ -10,25 +11,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientService {
-    public void create(Client client) throws SQLException {
+public class ClientService implements ClientDao {
+    public void create(Client client) {
         String sql = "INSERT INTO `clients`" + "(`nome`," + "`email`) VALUES(?,?)";
         Connection conn = null;
-        PreparedStatement pst = null;
+        PreparedStatement ps = null;
 
         try {
             conn = ConnectionFactory.getConnection();
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, client.getName());
-            pst.setString(2,client.getEmail());
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, client.getName());
+            ps.setString(2,client.getEmail());
 
-            pst.executeUpdate();
+            ps.executeUpdate();
         } catch (SQLException e) {
 
         } finally {
             try {
-                if (pst!=null){
-                pst.close();}
+                if (ps!=null){
+                ps.close();}
                 if (conn!=null){
                 conn.close();}
             } catch (SQLException e) {
@@ -36,6 +37,41 @@ public class ClientService {
             }
 
         }
+    }
+
+    public Client readForId(Client client){
+        String sql = "SELECT * FROM clients WHERE id = ?";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConnectionFactory.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            ps.setInt(1,client.getId());
+            rs = ps.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (rs!=null){
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null){
+                }
+
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+        return client;
     }
 
     public List<Client>  read() {

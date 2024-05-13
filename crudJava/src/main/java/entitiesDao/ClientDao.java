@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface ClientDao{
     public void create(Client client);
+    public Client readForId(Client client);
     public List<Client> read();
+    public void update(Client client);
+    public void delete(Client client);
 
 
 }
