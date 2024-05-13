@@ -9,14 +9,15 @@ public class ConnectionFactory {
         String url = "jdbc:mysql://localhost:3306/crud";
         String user = "root";
         String password = "1234567";
+        Connection connection = null;
 
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(url, user, password);
             System.out.println(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return connection;
 
     }
 }
