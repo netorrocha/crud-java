@@ -12,13 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientService implements ClientDao {
+    String sql = "";
+    private  Connection conn;
+    private PreparedStatement ps;
+    public ClientService() throws SQLException {
+        this.conn = ConnectionFactory.getConnection();
+    }
+    public ClientService(PreparedStatement ps){
+        try {
+            this.ps = conn.prepareStatement(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void create(Client client) {
         String sql = "INSERT INTO `clients`" + "(`nome`," + "`email`) VALUES(?,?)";
-        Connection conn = null;
-        PreparedStatement ps = null;
 
         try {
-            conn = ConnectionFactory.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, client.getName());
             ps.setString(2,client.getEmail());
@@ -26,32 +36,28 @@ public class ClientService implements ClientDao {
             ps.executeUpdate();
         } catch (SQLException e) {
 
-        } finally {
-            try {
-                if (ps!=null){
-                ps.close();}
-                if (conn!=null){
-                conn.close();}
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
         }
     }
 
-    public Client readForId(Client client){
-        String sql = "SELECT * FROM clients WHERE id = ?";
+    public Client readForId(Integer id){
+        sql = "SELECT * FROM clients WHERE id = ?";
 
-        Connection conn = null;
-        PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-            conn = ConnectionFactory.getConnection();
             ps = conn.prepareStatement(sql);
+            ps.setInt(1,id);
 
-            ps.setInt(1,client.getId());
+
             rs = ps.executeQuery();
+            if (rs.next()){
+                id = rs.getInt("id");
+                String name = rs.getString("nome");
+                String email = rs.getString("email");
+
+                Client client = new Client(id,name,email);
+                return client;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,31 +66,23 @@ public class ClientService implements ClientDao {
                 if (rs!=null){
                     rs.close();
                 }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null){
-                }
 
             }catch (SQLException e){
                 e.printStackTrace();
             }
         }
 
-        return client;
+        return null;
     }
 
     public List<Client>  read() {
-    String sql = "SELECT * FROM crud.clients";
+     sql = "SELECT * FROM crud.clients";
 
         List<Client> clients = new ArrayList<>();
 
-        Connection conn = null;
-        PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-            conn = ConnectionFactory.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -107,12 +105,6 @@ public class ClientService implements ClientDao {
                 if (rs != null) {
                     rs.close();
                 }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -122,13 +114,10 @@ public class ClientService implements ClientDao {
     }
 
     public void update(Client client){
-        String sql = "UPDATE clients SET nome = ?, email = ?" + "WHERE id = ?";
+    sql = "UPDATE clients SET nome = ?, email = ?" + "WHERE id = ?";
 
-        Connection conn = null;
-        PreparedStatement ps = null;
 
         try {
-            conn = ConnectionFactory.getConnection();
             ps = conn.prepareStatement(sql);
 
             ps.setString(1, client.getName());
@@ -138,43 +127,18 @@ public class ClientService implements ClientDao {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            try {
-                if (ps != null){
-                    ps.close();
-                }
-                if (conn != null){
-                    conn.close();
-                }
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
         }
     }
 
-    public void delete(Client client){
-        String sql = "DELETE FROM clients WHERE id = ?";
+    public void delete(Client client) {
+    sql = "DELETE FROM clients WHERE id = ?";
 
-        Connection conn = null;
-        PreparedStatement ps = null;
         try {
-        conn = ConnectionFactory.getConnection();
         ps = conn.prepareStatement(sql);
         ps.setInt(1, client.getId());
         ps.execute();
         }catch (SQLException e){
             e.printStackTrace();
-        }finally {
-            try {
-            if (ps != null){
-                ps.close();
-            }
-            if (conn != null){
-                conn.close();
-            }
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
         }
 
     }

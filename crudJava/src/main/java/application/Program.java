@@ -4,6 +4,7 @@ import entities.Client;
 import entitiesDao.ClientDao;
 import service.ClientService;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -40,12 +41,12 @@ public class Program {
                         case 1:
                             System.out.println("Informe o ID do usuário ");
                             Integer id = scanner.nextInt();
-                            Client clientForId = new Client(id,null,null);
-                            clientService.readForId(clientForId);
+                            Client client = clientService.readForId(id);
                             System.out.println(
-                                    "\nID: " + clientForId.getId() +
-                                    "\nNOME: " + clientForId.getName() +
-                                    "\nEMAIL: " + clientForId.getEmail());
+                                    "\nID: " + client.getId() +
+                                    "\nNOME: " + client.getName() +
+                                    "\nEMAIL: " + client.getEmail()
+                            );
                 }
 
         }
