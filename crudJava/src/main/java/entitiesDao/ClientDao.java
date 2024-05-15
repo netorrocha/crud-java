@@ -9,7 +9,7 @@ public interface ClientDao{
     public Client readForId(Integer id);
     public List<Client> read();
     public void update(Client client);
-    public void delete(Client client);
+    public void delete(Integer id);
 
 
 }

@@ -130,12 +130,12 @@ public class ClientService implements ClientDao {
         }
     }
 
-    public void delete(Client client) {
+    public void delete(Integer id) {
     sql = "DELETE FROM clients WHERE id = ?";
 
         try {
         ps = conn.prepareStatement(sql);
-        ps.setInt(1, client.getId());
+        ps.setInt(1, id);
         ps.execute();
         }catch (SQLException e){
             e.printStackTrace();
